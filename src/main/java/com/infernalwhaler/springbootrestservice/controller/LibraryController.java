@@ -11,6 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
+
 /**
  * @author sDeseure
  * @project SpringBootRestService
@@ -48,10 +50,48 @@ public class LibraryController {
         return new ResponseEntity<>(bookResponse, headers, HttpStatus.CREATED);
     }
 
-    @GetMapping("/findBook/{id}")
+    @GetMapping("/findBookById/{id}")
     public ResponseEntity<Library> findBookById(@PathVariable(value = "id") final String id) {
         return repository.findById(id)
                 .map(library -> new ResponseEntity<>(library, HttpStatus.FOUND))
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+    }
+
+    @GetMapping("/findBook/{author}")
+    public ResponseEntity<List<Library>> findBookByAuthor(@PathVariable("author") final String author) {
+        final List<Library> allByAuthor = repository.findAllByAuthor(author);
+        return new ResponseEntity<>(allByAuthor, HttpStatus.FOUND);
+    }
+
+    @GetMapping("/findBooks")
+    public ResponseEntity<List<Library>> findBooks() {
+        return new ResponseEntity<>(repository.findAll(), HttpStatus.OK);
+    }
+
+    @PutMapping("updateBook/{id}")
+    public ResponseEntity<Library> updateBook(@PathVariable("id") final String id, @RequestBody final Library library) {
+        final Library libraryToUpdate = repository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        libraryToUpdate.setAisle(library.getAisle());
+        libraryToUpdate.setBookName(library.getBookName());
+        libraryToUpdate.setAuthor(library.getAuthor());
+
+        repository.save(libraryToUpdate);
+
+        return new ResponseEntity<>(libraryToUpdate, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/deleteBook")
+    public ResponseEntity<AddBookResponse> deleteBook(@RequestBody final Library library) {
+        final String id = library.getId();
+        final Library bookToDelete = repository.findById(library.getId())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        repository.delete(bookToDelete);
+        bookResponse.setBookId(id);
+        bookResponse.setMessage("Book is Deleted");
+
+        return new ResponseEntity<>(bookResponse, HttpStatus.ACCEPTED);
     }
 }
