@@ -13,3 +13,7 @@ spring:
   test:
     database:
       replace: none
+
+logging:
+  file:
+    name: log/application.log

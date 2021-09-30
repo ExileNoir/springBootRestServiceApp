@@ -4,6 +4,8 @@ import com.infernalwhaler.springbootrestservice.model.AddBookResponse;
 import com.infernalwhaler.springbootrestservice.model.Library;
 import com.infernalwhaler.springbootrestservice.repository.ILibraryRepository;
 import com.infernalwhaler.springbootrestservice.service.LibraryService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -29,16 +31,20 @@ public class LibraryController {
     @Autowired
     private AddBookResponse bookResponse;
 
+    private static final Logger logger = LoggerFactory.getLogger(LibraryController.class);
+
     @PostMapping("/addBook")
     public ResponseEntity<AddBookResponse> addBookImpl(@RequestBody final Library library) {
         final String setBookId = service.buildId(library.getIsbn(), library.getAisle());
         bookResponse.setBookId(setBookId);
 
         if (service.checkBookAlreadyExists(setBookId)) {
+            logger.info("Book exists so skipping creation of book");
             bookResponse.setMessage("Book already exists");
             return new ResponseEntity<>(bookResponse, HttpStatus.ACCEPTED);
         }
 
+        logger.info("Book does not exist, so creating one Book");
         library.setId(setBookId);
         repository.save(library);
 
@@ -91,6 +97,7 @@ public class LibraryController {
         repository.delete(bookToDelete);
         bookResponse.setBookId(id);
         bookResponse.setMessage("Book is Deleted");
+        logger.info("Book is deleted");
 
         return new ResponseEntity<>(bookResponse, HttpStatus.ACCEPTED);
     }
