@@ -1,7 +1,7 @@
 package com.infernalwhaler.springbootrestservice.repository;
 
 import com.infernalwhaler.springbootrestservice.model.Library;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -15,10 +15,10 @@ import java.util.stream.Collectors;
  */
 
 @Repository
+@RequiredArgsConstructor
 public class LibraryRepositoryImpl implements ILibraryRepositoryCustom {
 
-    @Autowired
-    private ILibraryRepository repository;
+    private final ILibraryRepository repository;
 
     @Override
     public List<Library> findAllByAuthor(final String authorName) {
