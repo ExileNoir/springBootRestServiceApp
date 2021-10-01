@@ -12,9 +12,9 @@ import org.springframework.stereotype.Component;
  */
 
 @Component
-@Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Data
 public class AddBookResponse {
 
     private String message;

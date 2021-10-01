@@ -1,10 +1,9 @@
 package com.infernalwhaler.springbootrestservice.service;
 
-import com.infernalwhaler.springbootrestservice.model.AddBookResponse;
 import com.infernalwhaler.springbootrestservice.model.Library;
 
 import java.util.List;
-import java.util.Set;
+import java.util.Optional;
 
 /**
  * @author sDeseure
@@ -18,16 +17,13 @@ public interface ILibraryService {
 
     boolean checkBookAlreadyExists(final String id);
 
-    Set<Library> findAll();
+    Library save(final Library library);
 
-    Library findById(final String id);
-
-    AddBookResponse save(final Library library);
-
-    void delete(final Library library);
-
-    void deleteById(final String id);
-
+    Optional<Library> findById(final String id);
 
     List<Library> findAllByAuthor(final String authorName);
+
+    List<Library> findAll();
+
+    void delete(final Library library);
 }
