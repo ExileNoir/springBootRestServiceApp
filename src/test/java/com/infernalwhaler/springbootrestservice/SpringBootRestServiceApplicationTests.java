@@ -1,28 +1,32 @@
 package com.infernalwhaler.springbootrestservice;
 
 import com.infernalwhaler.springbootrestservice.controller.LibraryController;
+import com.infernalwhaler.springbootrestservice.mapper.MapperLibrary;
 import com.infernalwhaler.springbootrestservice.model.AddBookResponse;
-import com.infernalwhaler.springbootrestservice.model.Library;
+import com.infernalwhaler.springbootrestservice.modelDto.LibraryDto;
 import com.infernalwhaler.springbootrestservice.repository.ILibraryRepository;
 import com.infernalwhaler.springbootrestservice.service.LibraryService;
-import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 @SpringBootTest
-@RequiredArgsConstructor
 class SpringBootRestServiceApplicationTests {
 
-    private final LibraryController controller;
+    @Autowired
+    private LibraryController controller;
+    @Autowired
+    private MapperLibrary mapper;
     @MockBean
     private ILibraryRepository repository;
     @MockBean
     private LibraryService service;
+
 
     @Test
     void contextLoads() {
@@ -30,7 +34,7 @@ class SpringBootRestServiceApplicationTests {
 
     @Test
     public void checkBuildIdLogic() {
-        LibraryService service = new LibraryService(repository);
+        LibraryService service = new LibraryService(repository, mapper);
         final String id = service.buildId("ZMAN", 24);
         final String id1 = service.buildId("MAN", 24);
 
@@ -81,7 +85,7 @@ class SpringBootRestServiceApplicationTests {
     }
 
     @Test
-    public void  addBookAcceptedValidatedByMessage() {
+    public void addBookAcceptedValidatedByMessage() {
         //mock
         Mockito.when(service.buildId(buildLibrary().getIsbn(), buildLibrary().getAisle()))
                 .thenReturn(buildLibrary().getId());
@@ -96,8 +100,8 @@ class SpringBootRestServiceApplicationTests {
     }
 
 
-    private Library buildLibrary() {
-        return new Library("sfe322", "Spring", "sfe", 322, "ExileNoir");
+    private LibraryDto buildLibrary() {
+        return new LibraryDto("sfe322", "Spring", "sfe", 322, "ExileNoir");
     }
 
 }

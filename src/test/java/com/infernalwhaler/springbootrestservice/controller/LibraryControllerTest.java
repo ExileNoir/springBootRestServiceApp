@@ -2,6 +2,7 @@ package com.infernalwhaler.springbootrestservice.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.infernalwhaler.springbootrestservice.model.Library;
+import com.infernalwhaler.springbootrestservice.modelDto.LibraryDto;
 import com.infernalwhaler.springbootrestservice.service.LibraryService;
 import lombok.SneakyThrows;
 import org.hamcrest.CoreMatchers;
@@ -46,7 +47,7 @@ class LibraryControllerTest {
     @SneakyThrows
     @Test
     public void adBookControllerAccepted() {
-        final Library lib = buildLibrary();
+        final LibraryDto lib = buildLibrary01();
 
         when(service.buildId(lib.getIsbn(), lib.getAisle()))
                 .thenReturn(lib.getId());
@@ -55,11 +56,11 @@ class LibraryControllerTest {
 
         mockMvc.perform(MockMvcRequestBuilders.post("/addBook")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(mapperToJson(buildLibrary01())))                                      // end of perform action
+                        .content(mapperToJson(buildLibrary01())))                  // end of perform action
                 .andExpect(MockMvcResultMatchers.status().isCreated())            // begin of result action
                 .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("Succes Book is added"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(lib.getId()))
-                .andDo(print())                                                 // console output to verify
+                .andExpect(MockMvcResultMatchers.jsonPath("$.bookId").value(lib.getId()))
+                .andDo(print())                                                // console output to verify
                 .andReturn()
                 .getResponse();
     }
@@ -67,7 +68,7 @@ class LibraryControllerTest {
     @SneakyThrows
     @Test
     public void adBookControllerNotAccepted() {
-        final Library lib = buildLibrary();
+        final LibraryDto lib = buildLibrary01();
 
         when(service.buildId(lib.getIsbn(), lib.getAisle()))
                 .thenReturn(lib.getId());
@@ -76,7 +77,7 @@ class LibraryControllerTest {
 
         mockMvc.perform(MockMvcRequestBuilders.post("/addBook")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(mapperToJson(buildLibrary01())))                                      // end of perform action
+                        .content(mapperToJson(buildLibrary01())))                   // end of perform action
                 .andExpect(MockMvcResultMatchers.status().isAccepted())            // begin of result action
                 .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("Book already exists"))
                 .andDo(print())                                                 // console output to verify
@@ -152,31 +153,31 @@ class LibraryControllerTest {
                 .getResponse();
     }
 
-    private Library buildLibrary() {
-        return new Library("sfe322", "Spring", "sfe", 322, "ExileNoir");
+    private LibraryDto buildLibrary() {
+        return new LibraryDto("sfe322", "Spring", "sfe", 322, "ExileNoir");
     }
 
-    private Library buildLibrary01() {
-        return new Library("0020", "End Of Fantastic4", "00", 20, "MF Doom");
+    private LibraryDto buildLibrary01() {
+        return new LibraryDto("0020", "End Of Fantastic4", "00", 20, "MF Doom");
     }
 
-    private Library buildLibrary02() {
-        return new Library("007", "Die Another Day", "00", 7, "James Bond");
+    private LibraryDto buildLibrary02() {
+        return new LibraryDto("007", "Die Another Day", "00", 7, "James Bond");
     }
 
-    private List<Library> buildLibraries() {
+    private List<LibraryDto> buildLibraries() {
         return Stream.of(buildLibrary(), buildLibrary01(), buildLibrary02())
                 .collect(Collectors.toList());
     }
 
     @SneakyThrows
-    private String mapperToJson(final Library library) {
+    private String mapperToJson(final LibraryDto library) {
         final ObjectMapper mapper = new ObjectMapper();
         return mapper.writeValueAsString(library);
     }
 
     @SneakyThrows
-    private String updateMapperToJson(final Library library) {
+    private String updateMapperToJson(final LibraryDto library) {
         final ObjectMapper mapper = new ObjectMapper();
         library.setAisle(200);
         library.setBookName("Fantastic4 and how I ended them");

@@ -1,7 +1,7 @@
 package com.infernalwhaler.springbootrestservice.controller;
 
 import com.infernalwhaler.springbootrestservice.model.AddBookResponse;
-import com.infernalwhaler.springbootrestservice.model.Library;
+import com.infernalwhaler.springbootrestservice.modelDto.LibraryDto;
 import com.infernalwhaler.springbootrestservice.service.LibraryService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -30,7 +30,7 @@ public class LibraryController {
     private static final Logger logger = LoggerFactory.getLogger(LibraryController.class);
 
     @PostMapping("/addBook")
-    public ResponseEntity<AddBookResponse> addBookImpl(@RequestBody final Library library) {
+    public ResponseEntity<AddBookResponse> addBookImpl(@RequestBody final LibraryDto library) {
         final String setBookId = service.buildId(library.getIsbn(), library.getAisle());
         bookResponse.setBookId(setBookId);
 
@@ -53,15 +53,15 @@ public class LibraryController {
     }
 
     @GetMapping("/findBookById/{id}")
-    public ResponseEntity<Library> findBookById(@PathVariable(value = "id") final String id) {
+    public ResponseEntity<LibraryDto> findBookById(@PathVariable(value = "id") final String id) {
         return service.findById(id)
                 .map(library -> new ResponseEntity<>(library, HttpStatus.FOUND))
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
     @GetMapping("/findBook/{author}")
-    public ResponseEntity<List<Library>> findBookByAuthor(@PathVariable("author") final String author) {
-        final List<Library> allByAuthor = service.findAllByAuthor(author);
+    public ResponseEntity<List<LibraryDto>> findBookByAuthor(@PathVariable("author") final String author) {
+        final List<LibraryDto> allByAuthor = service.findAllByAuthor(author);
 
         if (allByAuthor.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
@@ -70,13 +70,13 @@ public class LibraryController {
     }
 
     @GetMapping("/findBooks")
-    public ResponseEntity<List<Library>> findBooks() {
+    public ResponseEntity<List<LibraryDto>> findBooks() {
         return new ResponseEntity<>(service.findAll(), HttpStatus.OK);
     }
 
     @PutMapping("updateBook/{id}")
-    public ResponseEntity<Library> updateBook(@PathVariable("id") final String id, @RequestBody final Library library) {
-        final Library libraryToUpdate = service.findById(id)
+    public ResponseEntity<LibraryDto> updateBook(@PathVariable("id") final String id, @RequestBody final LibraryDto library) {
+        final LibraryDto libraryToUpdate = service.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
         libraryToUpdate.setAisle(library.getAisle());
@@ -89,9 +89,9 @@ public class LibraryController {
     }
 
     @DeleteMapping("/deleteBook")
-    public ResponseEntity<AddBookResponse> deleteBook(@RequestBody final Library library) {
+    public ResponseEntity<AddBookResponse> deleteBook(@RequestBody final LibraryDto library) {
         final String id = library.getId();
-        final Library bookToDelete = service.findById(library.getId())
+        final LibraryDto bookToDelete = service.findById(library.getId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
         service.delete(bookToDelete);

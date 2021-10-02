@@ -1,6 +1,7 @@
 package com.infernalwhaler.springbootrestservice.service;
 
 import com.infernalwhaler.springbootrestservice.model.Library;
+import com.infernalwhaler.springbootrestservice.modelDto.LibraryDto;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,13 +18,13 @@ public interface ILibraryService {
 
     boolean checkBookAlreadyExists(final String id);
 
-    Library save(final Library library);
+    LibraryDto save(final LibraryDto library);
 
-    Optional<Library> findById(final String id);
+    Optional<LibraryDto> findById(final String id);
 
-    List<Library> findAllByAuthor(final String authorName);
+    List<LibraryDto> findAllByAuthor(final String authorName);
 
-    List<Library> findAll();
+    List<LibraryDto> findAll();
 
-    void delete(final Library library);
+    void delete(final LibraryDto library);
 }
