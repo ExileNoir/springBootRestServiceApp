@@ -1,6 +1,7 @@
 package com.infernalwhaler.springbootrestservice.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.infernalwhaler.springbootrestservice.SpringBootRestServiceApplication;
 import com.infernalwhaler.springbootrestservice.model.Library;
 import com.infernalwhaler.springbootrestservice.modelDto.LibraryDto;
 import com.infernalwhaler.springbootrestservice.service.LibraryService;

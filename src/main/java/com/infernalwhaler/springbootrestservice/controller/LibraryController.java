@@ -2,6 +2,7 @@ package com.infernalwhaler.springbootrestservice.controller;
 
 import com.infernalwhaler.springbootrestservice.model.AddBookResponse;
 import com.infernalwhaler.springbootrestservice.modelDto.LibraryDto;
+import com.infernalwhaler.springbootrestservice.service.ILibraryService;
 import com.infernalwhaler.springbootrestservice.service.LibraryService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -24,7 +25,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class LibraryController {
 
-    private final LibraryService service;
+    private final ILibraryService service;
     private final AddBookResponse bookResponse;
 
     private static final Logger logger = LoggerFactory.getLogger(LibraryController.class);
