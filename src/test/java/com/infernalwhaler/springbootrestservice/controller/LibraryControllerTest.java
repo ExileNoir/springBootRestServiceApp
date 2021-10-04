@@ -46,7 +46,7 @@ class LibraryControllerTest {
 
     @SneakyThrows
     @Test
-    public void adBookControllerAccepted() {
+    public void shouldAddBookControllerAccepted() {
         final LibraryDto lib = buildLibrary01();
 
         when(service.buildId(lib.getIsbn(), lib.getAisle()))
@@ -67,7 +67,7 @@ class LibraryControllerTest {
 
     @SneakyThrows
     @Test
-    public void adBookControllerNotAccepted() {
+    public void addBookControllerNotAccepted() {
         final LibraryDto lib = buildLibrary01();
 
         when(service.buildId(lib.getIsbn(), lib.getAisle()))
@@ -87,7 +87,7 @@ class LibraryControllerTest {
 
     @SneakyThrows
     @Test
-    public void findBookByAuthor() {
+    public void ShouldFindBookByAuthor() {
         when(service.findAllByAuthor(ArgumentMatchers.any()))
                 .thenReturn(buildLibraries());
 
@@ -102,7 +102,7 @@ class LibraryControllerTest {
 
     @SneakyThrows
     @Test
-    public void findEmptyBookByAuthor() {
+    public void findNoBookByAuthor() {
         when(service.findAllByAuthor(ArgumentMatchers.any()))
                 .thenReturn(new ArrayList<>());
 
@@ -116,7 +116,7 @@ class LibraryControllerTest {
 
     @SneakyThrows
     @Test
-    public void updateBook() {
+    public void ShouldUpdateBook() {
         when(service.findById(ArgumentMatchers.any()))
                 .thenReturn(Optional.of(buildLibrary01()));
 
@@ -136,7 +136,7 @@ class LibraryControllerTest {
 
     @SneakyThrows
     @Test
-    public void deleteBook() {
+    public void shouldDeleteBook() {
         when(service.findById(ArgumentMatchers.any()))
                 .thenReturn(Optional.of(buildLibrary02()));
         Mockito.doNothing()
