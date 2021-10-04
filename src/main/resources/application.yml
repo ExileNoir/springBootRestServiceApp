@@ -15,7 +15,10 @@ spring:
       replace: none
 
   profiles:
-    active: test
+    active: activatedProperties
+
+#  profiles:
+#    active: test
 
 logging:
   file:

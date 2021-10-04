@@ -26,7 +26,7 @@ public class TestsIT {
     @Test
     public void shouldGetAuthorNameBooks() {
         final TestRestTemplate restTemplate = new TestRestTemplate();
-        final ResponseEntity<String> response = restTemplate.getForEntity("http://localhost:8080/findBook/someBody", String.class);
+        final ResponseEntity<String> response = restTemplate.getForEntity("http://localhost:8080/findBook/Kitty", String.class);
 
         JSONAssert.assertEquals(expectedBooks(), response.getBody(), false);
         JSONAssert.assertEquals("302", String.valueOf(response.getStatusCode().value()), false);
